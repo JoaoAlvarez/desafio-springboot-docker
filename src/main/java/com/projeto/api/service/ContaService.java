@@ -1,25 +1,41 @@
 package com.projeto.api.service;
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.projeto.api.domain.Conta;
 import com.projeto.api.domain.enumeration.ContaSituacao;
 import com.projeto.api.repository.ContaRepository;
+import com.projeto.api.service.dto.ContaCsv;
+import com.projeto.api.web.rest.error.ImportCsvException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 @Slf4j
+@AllArgsConstructor
 public class ContaService {
 
-    @Autowired
     private ContaRepository contaRepository;
 
     public Optional<Conta> buscarPorId(Long id){
@@ -71,5 +87,39 @@ public class ContaService {
             return null;
         }
         return date != null ? date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) : null;
+    }
+
+    public Integer importarContas(MultipartFile file) throws IOException, ImportCsvException {
+        Set<Conta> list = parseCsv(file);
+        return contaRepository.saveAll(list).size();
+    }
+
+    private Set<Conta> parseCsv(MultipartFile file) throws IOException, ImportCsvException {
+        try(Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))){
+            HeaderColumnNameMappingStrategy<ContaCsv> strategy = new HeaderColumnNameMappingStrategy<>();
+            strategy.setType(ContaCsv.class);
+            CsvToBean<ContaCsv> csvToBean = new CsvToBeanBuilder<ContaCsv>(reader)
+                    .withMappingStrategy(strategy)
+                    .withIgnoreEmptyLine(true)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+            List<ContaCsv> lines = csvToBean.parse();
+            Set<Conta> contas = new HashSet<>();
+
+            for (int i = 0; i < lines.size(); i++) {
+                ContaCsv line = lines.get(i);
+                if (line.getValor() == null) {
+                    throw new ImportCsvException("Valor deve ser preenchido na linha: " + (i + 1));
+                }
+                contas.add(Conta.builder()
+                        .dataPagamento(line.getDataPagamentoLocalDate())
+                        .dataVencimento(line.getDataVencimentoLocalDate())
+                        .descricao(line.getDescricao())
+                        .valor(line.getValor())
+                        .situacao(line.getSituacaoEnum())
+                        .build());
+            }
+            return contas;
+        }
     }
 }

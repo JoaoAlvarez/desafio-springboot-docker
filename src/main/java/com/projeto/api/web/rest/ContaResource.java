@@ -6,6 +6,7 @@ import com.projeto.api.service.ContaService;
 import com.projeto.api.web.rest.dto.ManterContaDTO;
 import com.projeto.api.web.rest.dto.ViewContaDTO;
 import com.projeto.api.web.rest.dto.mapper.ContaMapper;
+import com.projeto.api.web.rest.error.ImportCsvException;
 import com.projeto.api.web.rest.util.HeaderUtil;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +19,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.projeto.api.web.rest.util.PaginationUtil;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -121,7 +124,20 @@ public class ContaResource {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    private ResponseEntity<Conta> returnError(String message, String keyError) {
+    @PostMapping(value = "/import", consumes = {"multipart/form-data"})
+    public ResponseEntity<Integer> importByCsv(@RequestPart("file")MultipartFile file) throws IOException {
+        try{
+            return ResponseEntity.ok(contaService.importarContas(file));
+        } catch (ImportCsvException e1 ){
+            e1.printStackTrace();
+            return returnError(e1.getMessage(), "importerr");
+        } catch (Exception e ){
+            e.printStackTrace();
+            return returnError("Erro ao importar contas", "importerr");
+        }
+    }
+
+    private ResponseEntity returnError(String message, String keyError) {
         return ResponseEntity
                 .badRequest()
                 .headers(HeaderUtil.createFailureAlert(applicationName, false, ENTITY_NAME, keyError, message))

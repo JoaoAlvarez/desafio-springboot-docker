@@ -2,7 +2,10 @@ package com.projeto.api.domain;
 
 import com.projeto.api.domain.enumeration.ContaSituacao;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,6 +13,9 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "contas")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Conta {
 
     protected static final String SEQUENCIAL = "conta_id_seq";
