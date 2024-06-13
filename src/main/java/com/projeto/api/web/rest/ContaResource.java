@@ -9,6 +9,7 @@ import com.projeto.api.web.rest.dto.ViewValorTotalPeriodoDTO;
 import com.projeto.api.web.rest.dto.mapper.ContaMapper;
 import com.projeto.api.web.rest.error.ImportCsvException;
 import com.projeto.api.web.rest.util.HeaderUtil;
+import com.projeto.api.web.rest.util.PaginationUtil;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.api.annotations.ParameterObject;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.projeto.api.web.rest.util.PaginationUtil;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -33,7 +33,6 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 
 @RestController

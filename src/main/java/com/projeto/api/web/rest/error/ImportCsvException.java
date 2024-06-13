@@ -8,7 +8,4 @@ public class ImportCsvException extends Exception  {
         super(msg);
     }
 
-    public ImportCsvException(String msg, Throwable cause){
-        super(msg, cause);
-    }
 }

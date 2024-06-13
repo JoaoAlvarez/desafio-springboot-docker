@@ -43,7 +43,7 @@ public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
 
             if(usuario == null){
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Usuário nao existe");
+                response.getWriter().write("{ \"message\" : \"Usuário nao existe\"");
                 return;
             }
 
@@ -51,7 +51,7 @@ public class CustomBasicAuthenticationFilter extends OncePerRequestFilter {
 
             if(!valid){
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Senha não confere");
+                response.getWriter().write("{ \"message\" : \"Senha não confere\"");
                 return;
             }
 

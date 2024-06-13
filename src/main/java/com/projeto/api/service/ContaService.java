@@ -10,7 +10,6 @@ import com.projeto.api.service.dto.ContaCsv;
 import com.projeto.api.web.rest.error.ImportCsvException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,12 +23,11 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -100,7 +98,7 @@ public class ContaService {
         return contaRepository.saveAll(list).size();
     }
 
-    private Set<Conta> parseCsv(MultipartFile file) throws IOException, ImportCsvException {
+    private Set<Conta> parseCsv(MultipartFile file) throws IOException, ImportCsvException, DateTimeParseException {
         try(Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))){
             HeaderColumnNameMappingStrategy<ContaCsv> strategy = new HeaderColumnNameMappingStrategy<>();
             strategy.setType(ContaCsv.class);
@@ -115,7 +113,13 @@ public class ContaService {
             for (int i = 0; i < lines.size(); i++) {
                 ContaCsv line = lines.get(i);
                 if (line.getValor() == null) {
-                    throw new ImportCsvException("Valor deve ser preenchido na linha: " + (i + 1));
+                    throw new ImportCsvException("Valor deve ser preenchido na linha " + (i + 1));
+                }
+                try{
+                    line.getDataPagamentoLocalDate();
+                    line.getDataVencimentoLocalDate();
+                } catch (DateTimeParseException dateTimeParseException){
+                    throw new ImportCsvException("Formato de data Invalida na linha " + (i + 1));
                 }
                 contas.add(Conta.builder()
                         .dataPagamento(line.getDataPagamentoLocalDate())

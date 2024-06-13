@@ -13,10 +13,11 @@ Aplicação Web para gerenciamento de tarefas(To-Do list), onde é possível adi
 - Docker Compose
 
 ## 🚀 Executando projeto
-#### Para build da imagem docker
+#### Gere uma imagem docker (Executa os testes)
 ```
-./mvnw -ntp verify -DskipTests jib:dockerBuild
+./mvnw -ntp verify jib:dockerBuild
 ```
+insira ``` -DskipTests``` se desejar pular os testes durante a build 
 #### Para execução do BackEnd em conjunto ao Banco de dados (PostgreSQL)
 ```
 docker-compose -f src/main/docker/app.yml up -d

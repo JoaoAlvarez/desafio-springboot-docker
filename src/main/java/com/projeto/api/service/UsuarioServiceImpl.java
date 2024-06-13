@@ -10,12 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
 
-    public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
     @Autowired
     UsuarioRepository userRepository;
-
     @Override
     public Usuario create(Usuario usuario) {
         Usuario existUsuario = userRepository.findByUsername(usuario.getUsername());
@@ -28,5 +24,9 @@ public class UsuarioServiceImpl implements UsuarioService {
         Usuario createdUsuario = userRepository.save(usuario);
 
         return createdUsuario;
+    }
+
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 }

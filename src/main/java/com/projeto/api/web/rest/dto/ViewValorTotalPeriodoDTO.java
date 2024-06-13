@@ -1,12 +1,12 @@
 package com.projeto.api.web.rest.dto;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data
+@Getter
 @Builder
 public class ViewValorTotalPeriodoDTO {
     private LocalDate dataInicial;
