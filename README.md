@@ -26,6 +26,45 @@ docker-compose -f src/main/docker/app.yml up -d
 
 ## Endpoints
 O projeto disponibiliza endpoints para Usuários e Contas, onde utilizam o padrão Rest de comunicação, consumindo e retornando dados no formato JSON.
+
+### Autenticação e Autorização
+
+Este projeto utiliza autenticação do tipo Basic Auth. Todas as requisições, exceto a de criação de usuário, requerem o envio do nome de usuário e senha. Além disso, o usuário deve possuir as permissões (roles) correspondentes à rota que deseja acessar. As seguintes permissões estão pré-cadastradas:
+
+- ID 1: conta_select
+- ID 2: conta_insert
+- ID 3: conta_update
+- ID 4: conta_delete
+
+Essa versão é mais clara e direta, facilitando a compreensão das informações sobre a autenticação e autorização no projeto.
+
+## Usuário
+#### Criar
+POST /usuario
+```bash
+http://localhost:8080/usuario/
+```
+Request Body
+```bash
+{
+	"username": "João Alvarez",
+	"password": "contato@joaoalvarez.dev",
+	"roles": [
+	    {"id": 1},
+	    {"id": 2},
+	    {"id": 3},
+	    {"id": 4},
+	]
+}
+```
+Possiveis roles:
+- Acesso a consulta de contas: ``` {"id": 1, "name": "conta_select"}```
+- Acesso a inserção de contas: ``` {"id": 2, "name": "conta_insert"} ```
+- Acesso a atualização de contas: ``` {"id": 4, "name": "conta_update"}```
+- Acesso a deleção de contas: ``` {"id": 4, "name": "conta_delete"}```
+
+
+
 ### Contas
 #### Listar Todos
 GET /api/v1/conta/listar
@@ -94,24 +133,4 @@ Request Muiltpart com o parametro "file"
 descricao,dataVencimento,dataPagamento,valor,situacao
 Conta de luz,20/02/2020,,100,
 IPVA,12/03/2021,12/04/2021,22.50,PAGO
-```
-
-## Usuário
-#### Criar
-POST /usuario
-```bash
-http://localhost:8080/usuario/
-```
-Request Body
-```bash
-{
-	"nome": "João Alvarez",
-	"email": "contato@joaoalvarez.dev",
-	"senha": "123"
-}
-```
-#### Listar por Id
-GET /usuario/:id
-```bash
-http://localhost:8080/usuario/1
 ```

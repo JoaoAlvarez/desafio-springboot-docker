@@ -19,6 +19,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -59,6 +60,7 @@ public class ContaResource {
      * @param conta Nova conta para pagar.
      * @return {@link ResponseEntity} com status {@code 201 (Created)} e no body o a nova conta para pagar, ou status {@code 400 (Bad Request)} se a conta ja tiver ID.
      */
+    @PreAuthorize("hasRole('conta_insert')")
     @PostMapping
     public ResponseEntity<Conta> cadastrarConta(@Valid @RequestBody ManterContaDTO conta) throws URISyntaxException {
         log.debug("REST request para criar nova conta : {}", conta);
@@ -72,6 +74,7 @@ public class ContaResource {
                 .body(result);
     }
 
+    @PreAuthorize("hasRole('conta_select')")
     @GetMapping("/listar")
     public ResponseEntity<List> buscaPaginada(
             @RequestParam(required = false, name = "dataVencimento")
@@ -86,6 +89,7 @@ public class ContaResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @PreAuthorize("hasRole('conta_select')")
     @GetMapping("/{id}")
     public ResponseEntity<Conta> buscarPorId(
             @PathVariable final Long id
@@ -95,6 +99,7 @@ public class ContaResource {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @PreAuthorize("hasRole('conta_select')")
     @GetMapping(value = "/total-valor-pago")
     public ResponseEntity<ViewValorTotalPeriodoDTO> getTotalValorPago(
             @RequestParam("dataInicial") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dataInicial,
@@ -116,6 +121,7 @@ public class ContaResource {
      * ou status {@code 400 (Bad Request)} se a conta nao for valida,
       * ou status {@code 500 (Internal Server Error)} se a conta nao conseguiu ser atualizar.
      */
+    @PreAuthorize("hasRole('conta_update')")
     @PatchMapping("/{id}")
     public ResponseEntity<Conta> atualizarConta(@PathVariable(value = "id", required = false) final Long id,
                                             @RequestBody ManterContaDTO conta) {
@@ -138,6 +144,7 @@ public class ContaResource {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @PreAuthorize("hasRole('conta_insert')")
     @PostMapping(value = "/import", consumes = {"multipart/form-data"})
     public ResponseEntity<Integer> importByCsv(@RequestPart("file")MultipartFile file) throws IOException {
         try{
