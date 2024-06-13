@@ -39,12 +39,21 @@ Nele recebemos os possiveis parametros de URL:
 - size: quantidade de Itens por página
 - sort: Ordenaçao da paginação no seguinte formato "{campo},{asc ou desc}" (exemplo: dataVencimento,asc) 
 
-
 #### Listar por Id
 GET api/v1/conta/:id
 ```bash
 http://localhost:8080/api/v1/conta/1
 ```
+
+#### Listar Todos
+GET /api/v1/conta/total-valor-pago
+```bash
+http://localhost:8080/api/v1/conta/total-valor-pago?dataInicial=20/02/2000&dataFinal=20/02/2026
+```
+Nele recebemos os possiveis parametros de URL:
+- dataInicial: Data inicial do periodo formato dd/MM/yyyy
+- dataFinal: Data final do periodo formato dd/MM/yyyy
+
 #### Criar
 POST /api/v1/conta
 ```bash
@@ -73,6 +82,18 @@ Request Body
 	"descricao": "Conta de água",
 	"situacao": "PAGO"
 }
+```
+
+#### Importar Contas por CSV
+PATCH /api/v1/conta/import
+```bash
+http://localhost:8080/api/v1/conta/import
+```
+Request Muiltpart com o parametro "file"
+```bash
+descricao,dataVencimento,dataPagamento,valor,situacao
+Conta de luz,20/02/2020,,100,
+IPVA,12/03/2021,12/04/2021,22.50,PAGO
 ```
 
 ## Usuário

@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -46,6 +47,11 @@ public class ContaService {
         log.info("Nova conta para ser cadastrada: {}",dto);
         dto.setSituacao(ContaSituacao.PENDENTE);
         return contaRepository.save(dto);
+    }
+
+
+    public BigDecimal getTotalValorPagoPorPeriodo(LocalDate dataInicial, LocalDate dataFinal) {
+        return contaRepository.findTotalValorBySituacaoAndPeriodo(ContaSituacao.PAGO, dataInicial, dataFinal);
     }
 
     public Optional<Conta> atualizarConta(Conta dto){

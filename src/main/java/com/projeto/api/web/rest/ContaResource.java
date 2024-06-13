@@ -5,6 +5,7 @@ import com.projeto.api.repository.ContaRepository;
 import com.projeto.api.service.ContaService;
 import com.projeto.api.web.rest.dto.ManterContaDTO;
 import com.projeto.api.web.rest.dto.ViewContaDTO;
+import com.projeto.api.web.rest.dto.ViewValorTotalPeriodoDTO;
 import com.projeto.api.web.rest.dto.mapper.ContaMapper;
 import com.projeto.api.web.rest.error.ImportCsvException;
 import com.projeto.api.web.rest.util.HeaderUtil;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.projeto.api.web.rest.util.PaginationUtil;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
@@ -91,6 +93,18 @@ public class ContaResource {
         return contaService.buscarPorId(id)
                 .map(response -> ResponseEntity.ok().body(response))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping(value = "/total-valor-pago")
+    public ResponseEntity<ViewValorTotalPeriodoDTO> getTotalValorPago(
+            @RequestParam("dataInicial") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dataInicial,
+            @RequestParam("dataFinal") @DateTimeFormat(pattern = "dd/MM/yyyy") LocalDate dataFinal) {
+        BigDecimal total = contaService.getTotalValorPagoPorPeriodo(dataInicial, dataFinal);
+
+        return ResponseEntity.ok(ViewValorTotalPeriodoDTO.builder()
+                .dataInicial(dataInicial)
+                .dataFinal(dataFinal).valorTotal(total).build());
+
     }
 
     /**
