@@ -1,13 +1,11 @@
-CREATE SEQUENCE IF NOT EXISTS usuario_id_seq START WITH 1 INCREMENT BY 1;
-
 CREATE TABLE IF NOT EXISTS usuario (
-    id BIGINT PRIMARY KEY DEFAULT NEXTVAL('usuario_id_seq'),
+    id BIGINT PRIMARY KEY AUTO_INCREMENT, -- PARA O H2 TROCAR O NEXTVAL POR AUTO_INCREMENT
     username VARCHAR(255),
     password VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS usuario_roles (
    usuario_id BIGINT,
-   roles_id BIGINT
+    roles_id BIGINT
 );
 

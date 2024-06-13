@@ -14,8 +14,11 @@ import lombok.Setter;
 @Setter
 public class Role {
 
+    protected static final String SEQUENCIAL = "role_id_seq";
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCIAL)
+    @SequenceGenerator(name = SEQUENCIAL, allocationSize = 1)
     private Long id;
 
     private String name;

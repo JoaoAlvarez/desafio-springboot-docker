@@ -15,9 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario {
+    protected static final String SEQUENCIAL = "usuario_id_seq";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQUENCIAL)
+    @SequenceGenerator(name = SEQUENCIAL, allocationSize = 1)
     private Long id;
 
     private String username;
