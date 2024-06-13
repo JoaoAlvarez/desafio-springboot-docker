@@ -7,7 +7,7 @@ import com.projeto.api.domain.Conta;
 import com.projeto.api.domain.enumeration.ContaSituacao;
 import com.projeto.api.repository.ContaRepository;
 import com.projeto.api.service.dto.ContaCsv;
-import com.projeto.api.web.rest.error.ImportCsvException;
+import com.projeto.api.web.rest.exceptions.ImportCsvException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

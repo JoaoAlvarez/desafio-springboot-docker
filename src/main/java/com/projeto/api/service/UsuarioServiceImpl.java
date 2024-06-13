@@ -11,17 +11,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
-    UsuarioRepository userRepository;
+    UsuarioRepository repository;
     @Override
     public Usuario create(Usuario usuario) {
-        Usuario existUsuario = userRepository.findByUsername(usuario.getUsername());
-
-        if(existUsuario != null){
-            throw new Error("Usuário ja existe!");
-        }
-
         usuario.setPassword(passwordEncoder().encode(usuario.getPassword()));
-        Usuario createdUsuario = userRepository.save(usuario);
+        Usuario createdUsuario = repository.save(usuario);
 
         return createdUsuario;
     }

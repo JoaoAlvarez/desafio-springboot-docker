@@ -3,7 +3,7 @@ package com.projeto.api.service;
 import com.projeto.api.domain.Conta;
 import com.projeto.api.domain.enumeration.ContaSituacao;
 import com.projeto.api.repository.ContaRepository;
-import com.projeto.api.web.rest.error.ImportCsvException;
+import com.projeto.api.web.rest.exceptions.ImportCsvException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

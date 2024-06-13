@@ -6,7 +6,7 @@ import com.projeto.api.service.ContaService;
 import com.projeto.api.web.rest.dto.ManterContaDTO;
 import com.projeto.api.web.rest.dto.ViewValorTotalPeriodoDTO;
 import com.projeto.api.web.rest.dto.mapper.ContaMapper;
-import com.projeto.api.web.rest.error.ImportCsvException;
+import com.projeto.api.web.rest.exceptions.ImportCsvException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

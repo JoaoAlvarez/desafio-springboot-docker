@@ -1,4 +1,4 @@
-package com.projeto.api.web.rest.error;
+package com.projeto.api.web.rest.exceptions;
 
 public class ImportCsvException extends Exception  {
 

@@ -67,7 +67,7 @@ Possiveis roles:
 
 
 ### Contas
-#### Listar Todos
+#### Listar contas a pagar (Pendentes)
 GET /api/v1/conta/listar
 ```bash
 http://localhost:8080/api/v1/conta/listar?dataVencimento=13/06/2024&descricao=ta&size=10&sort=dataVencimento,asc&page=0

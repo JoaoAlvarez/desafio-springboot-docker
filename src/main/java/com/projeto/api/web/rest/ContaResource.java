@@ -7,7 +7,7 @@ import com.projeto.api.web.rest.dto.ManterContaDTO;
 import com.projeto.api.web.rest.dto.ViewContaDTO;
 import com.projeto.api.web.rest.dto.ViewValorTotalPeriodoDTO;
 import com.projeto.api.web.rest.dto.mapper.ContaMapper;
-import com.projeto.api.web.rest.error.ImportCsvException;
+import com.projeto.api.web.rest.exceptions.ImportCsvException;
 import com.projeto.api.web.rest.util.HeaderUtil;
 import com.projeto.api.web.rest.util.PaginationUtil;
 import jakarta.validation.Valid;
