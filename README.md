@@ -48,8 +48,8 @@ http://localhost:8080/usuario/
 Request Body
 ```bash
 {
-	"username": "João Alvarez",
-	"password": "contato@joaoalvarez.dev",
+	"username": "joao",
+	"password": "senha",
 	"roles": [
 	    {"id": 1},
 	    {"id": 2},
@@ -123,6 +123,7 @@ Request Body
 	"situacao": "PAGO"
 }
 ```
+Obs.: Podendo receber ambos os formatos de data
 
 #### Importar Contas por CSV
 PATCH /api/v1/conta/import
