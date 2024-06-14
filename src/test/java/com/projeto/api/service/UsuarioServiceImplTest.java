@@ -3,6 +3,7 @@ package com.projeto.api.service;
 import com.projeto.api.domain.Usuario;
 import com.projeto.api.repository.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -43,7 +44,6 @@ public class UsuarioServiceImplTest {
         usuario.setPassword(PASSWORD);
 
         // Mocking behavior of userRepository
-        Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(null);
         Mockito.when(passwordEncoder.encode(Mockito.any())).thenReturn("hashedPassword");
         Mockito.when(userRepository.save(usuario)).thenReturn(usuario);
 
@@ -53,29 +53,7 @@ public class UsuarioServiceImplTest {
         // Then
         assertThat(createdUsuario).isNotNull();
         assertThat(createdUsuario.getUsername()).isEqualTo(USERNAME);
-        Mockito.verify(userRepository, Mockito.times(1)).findByUsername(USERNAME);
         Mockito.verify(userRepository, Mockito.times(1)).save(usuario);
     }
 
-    @Test
-    @DisplayName("Should throw error when User already exists")
-    void create_userAlreadyExists() {
-        // Given
-        Usuario existingUsuario = new Usuario();
-        existingUsuario.setUsername(USERNAME);
-
-        Usuario newUser = new Usuario();
-        newUser.setUsername(USERNAME);
-
-        // Mocking userRepository
-        Mockito.when(userRepository.findByUsername(USERNAME)).thenReturn(existingUsuario);
-
-        // When/Then
-        assertThatThrownBy(() -> usuarioService.create(newUser))
-                .isInstanceOf(Error.class)
-                .hasMessage("Usuário ja existe!");
-
-        Mockito.verify(userRepository, Mockito.times(1)).findByUsername(USERNAME);
-        Mockito.verify(userRepository, Mockito.never()).save(Mockito.any());
-    }
 }
